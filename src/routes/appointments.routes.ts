@@ -1,16 +1,8 @@
 import { Router } from 'express'; // importando o router
-
-import { uuid } from 'uuidv4'; // importando a lib de ids
 import { startOfDay, parseISO, isEqual } from 'date-fns';
+import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
-
-interface Appointment {
-  // fazendo a tipagem de appointment
-  id: string;
-  provider: string;
-  date: Date;
-}
 
 // definindo que o appointmentss será um array de appointment
 const appointments: Appointment[] = []; // iniciando o array que vai receber os agendamentos depois irá ser mudado para um banco de dados
@@ -32,11 +24,7 @@ appointmentsRouter.post('/', (request, response) => {
       .json({ message: 'This appointment is already booked.' });
   }
 
-  const appointment = {
-    id: uuid(),
-    provider,
-    date: parsedDate,
-  };
+  const appointment = new Appointment(provider, parsedDate);
 
   appointments.push(appointment);
 
